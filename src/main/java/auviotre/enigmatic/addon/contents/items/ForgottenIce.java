@@ -8,9 +8,6 @@ import com.aizistral.enigmaticlegacy.items.generic.ItemSpellstoneCurio;
 import com.aizistral.omniconfig.wrappers.Omniconfig;
 import com.aizistral.omniconfig.wrappers.OmniconfigWrapper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -82,11 +79,6 @@ public class ForgottenIce extends ItemSpellstoneCurio implements ISpellstone {
             ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticaddons.forgottenIce9");
         } else {
             ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticlegacy.holdShift");
-        }
-        try {
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticlegacy.void");
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticlegacy.currentKeybind", ChatFormatting.LIGHT_PURPLE, KeyMapping.createNameSupplier("key.spellstoneAbility").get().getString().toUpperCase());
-        } catch (NullPointerException ignored) {
         }
     }
 
