@@ -15,8 +15,6 @@ import com.aizistral.omniconfig.wrappers.OmniconfigWrapper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
@@ -106,66 +104,6 @@ public class CursedXPScroll extends ItemBaseCurio implements ICursed {
             ItemLoreHelper.indicateCursedOnesOnly(list);
         }
         this.addAttributes(list, stack);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    protected void addAttributes(List<Component> list, ItemStack stack) {
-        double level = getLevelModifier(stack);
-        if (level == 0) return;
-        ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticlegacy.void");
-        ItemLoreHelper.addLocalizedFormattedString(list, "curios.modifiers.scroll", ChatFormatting.GOLD);
-        ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticaddons.damage", ChatFormatting.GOLD, "+" + String.format("%.1f", level * damageBoostLimit.getValue()) + "%");
-        ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticaddons.speed", ChatFormatting.GOLD, "+" + String.format("%.1f", level * speedBoostLimit.getValue()) + "%");
-        ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticaddons.knockback_resistance", ChatFormatting.GOLD, "+" + String.format("%.1f", level * KRBoostLimit.getValue()) + "%");
-    }
-
-    public List<Component> getAttributesTooltip(List<Component> tooltips, ItemStack stack) {
-        tooltips.clear();
-        return tooltips;
-    }
-
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand handIn) {
-        ItemStack stack = player.getItemInHand(handIn);
-        this.trigger(world, stack, player, handIn, true);
-        return InteractionResultHolder.success(stack);
-    }
-
-    public void trigger(Level world, ItemStack stack, Player player, InteractionHand hand, boolean swing) {
-        if (!player.isCrouching()) {
-            if (ItemNBTHelper.getBoolean(stack, "AbsorptionMode", true)) {
-                ItemNBTHelper.setBoolean(stack, "AbsorptionMode", false);
-                world.playSound(null, player.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, (float) (0.800000011920929 + Math.random() * 0.20000000298023224));
-            } else {
-                ItemNBTHelper.setBoolean(stack, "AbsorptionMode", true);
-                world.playSound(null, player.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, (float) (0.800000011920929 + Math.random() * 0.20000000298023224));
-            }
-        } else if (ItemNBTHelper.getBoolean(stack, "IsActive", false)) {
-            ItemNBTHelper.setBoolean(stack, "IsActive", false);
-            world.playSound(null, player.blockPosition(), EnigmaticSounds.CHARGED_OFF, SoundSource.PLAYERS, (float) (0.800000011920929 + Math.random() * 0.20000000298023224), (float) (0.800000011920929 + Math.random() * 0.20000000298023224));
-        } else {
-            ItemNBTHelper.setBoolean(stack, "IsActive", true);
-            world.playSound(null, player.blockPosition(), EnigmaticSounds.CHARGED_ON, SoundSource.PLAYERS, (float) (0.800000011920929 + Math.random() * 0.20000000298023224), (float) (0.800000011920929 + Math.random() * 0.20000000298023224));
-        }
-        if (swing) {
-            player.swing(hand);
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public boolean isFoil(ItemStack stack) {
-        return ItemNBTHelper.getBoolean(stack, "IsActive", false);
-    }
-
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack) {
-        LivingEntity entity = slotContext.entity();
-        double level = getLevelModifier(stack);
-        if (entity instanceof Player player && SuperpositionHandler.isTheCursedOne(player) && level > 0) {
-            Multimap<Attribute, AttributeModifier> attributes = HashMultimap.create();
-            attributes.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(UUID.fromString("DC1A2466-36E9-A205-F278-1A8257934E09"), "Cursed XP Bonus", level / 100.0 * speedBoostLimit.getValue(), AttributeModifier.Operation.MULTIPLY_TOTAL));
-            attributes.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(UUID.fromString("1413353D-4D00-953F-B40B-8A17AF92411F"), "Cursed XP Bonus", level / 100.0 * KRBoostLimit.getValue(), AttributeModifier.Operation.MULTIPLY_TOTAL));
-            return attributes;
-        }
-        return super.getAttributeModifiers(slotContext, uuid, stack);
     }
 
     public static int getLevel(ItemStack stack) {
