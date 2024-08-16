@@ -74,32 +74,6 @@ public class RevivalLeaf extends ItemSpellstoneCurio implements ISpellstone {
     }
 
 
-    @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> list, TooltipFlag flagIn) {
-        ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticlegacy.void");
-        if (Screen.hasShiftDown()) {
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticaddons.revivalLeaf1");
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticaddons.revivalLeaf2");
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticlegacy.void");
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticaddons.revivalLeafCooldown", ChatFormatting.GOLD, (float) this.getCooldown(Minecraft.getInstance().player) / 20.0F);
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticlegacy.void");
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticaddons.revivalLeaf3");
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticaddons.revivalLeaf4");
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticaddons.revivalLeaf5");
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticaddons.revivalLeaf6");
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticaddons.revivalLeaf7");
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticaddons.revivalLeaf8");
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticaddons.revivalLeaf9");
-        } else {
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticlegacy.holdShift");
-        }
-        try {
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticlegacy.void");
-            ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticlegacy.currentKeybind", ChatFormatting.LIGHT_PURPLE, KeyMapping.createNameSupplier("key.spellstoneAbility").get().getString().toUpperCase());
-        } catch (NullPointerException ignored) {
-        }
-    }
-
     public int getCooldown(Player player) {
         return player != null && reducedCooldowns.test(player) ? 200 : spellstoneCooldown.getValue();
     }
